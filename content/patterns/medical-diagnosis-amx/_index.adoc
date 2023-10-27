@@ -1,0 +1,103 @@
+---
+title: Medical Diagnosis - AMX
+date: 2023-10-10
+validated: true
+summary: This pattern is based on a demo implementation of an automated data pipeline for chest X-ray analysis previously developed by Red Hat. The pattern is modified to utilize Intel AMX feature.
+products:
+- Red Hat OpenShift Container Platform
+- Red Hat OpenShift Serverless
+- Red Hat OpenShift Data Foundation
+- Red Hat OpenShift Node Feature Discovery
+- 4th Gen Intel Xeon Scalable processors with Intel® Advanced Matrix Extensions (Intel® AMX)
+industries:
+- medical
+aliases: /medical-diagnosis-amx/
+pattern_logo: medical-diagnosis.png
+links:
+  install: getting-started
+  arch: https://www.redhat.com/architect/portfolio/architecturedetail?ppid=6
+  help: https://groups.google.com/g/hybrid-cloud-patterns
+  bugs: https://github.com/hybrid-cloud-patterns/medical-diagnosis-amx/issues
+ci: medicaldiag
+---
+
+:toc:
+:imagesdir: /images
+:_content-type: ASSEMBLY
+include::modules/comm-attributes.adoc[]
+
+//Module to be included
+//:_content-type: CONCEPT
+//:imagesdir: ../../images
+[id="about-med-diag-pattern"]
+= About the {med-pattern}
+
+Background::
+
+This validated pattern is modified version of Medical Diagnosis pattern. It includes the same functionality as the original pattern. The difference is that this solution additionally contains Node Feature Discovery Operator, which task is to detect hardware features and expose it as labels for this node. Red Hat OpenShift Serverless component is modified to assign AI workload to nodes with available AMX feature. Machine Learning model was quantized to int8 precision to improve efficiency without much accuracy loss.
+
+Workflow::
+
+* Node Feature Discovery operator labels nodes with AMX capabilities.
+* Ingest chest X-rays from a simulated X-ray machine and puts them into an `objectStore` based on Ceph.
+* The `objectStore` sends a notification to a Kafka topic.
+* A KNative Eventing listener to the topic triggers a KNative Serving function.
+* KNative Serving was modified to schedule pods with AI workload only on nodes with enabled AMX feature
+* An ML-trained model running in a container makes a risk assessment of Pneumonia for incoming images.
+* A Grafana dashboard displays the pipeline in real time, along with images incoming, processed, anonymized, and full metrics collected from Prometheus.
+
+This pipeline is showcased link:https://www.youtube.com/watch?v=zja83FVsm14[in this video].
+
+image::medical-edge/dashboard.png[link="/images/medical-edge/dashboard.png"]
+
+[id="about-solution-med"]
+== About the solution elements
+
+The solution aids the understanding of the following:
+
+* How to use a GitOps approach to keep in control of configuration and operations.
+* How to deploy AI/ML technologies for medical diagnosis using GitOps.
+
+The {med-pattern} uses the following products and technologies:
+
+* {rh-ocp} for container orchestration
+* {rh-gitops}, a GitOps continuous delivery (CD) solution
+* {rh-amq-first}, an event streaming platform based on the Apache Kafka
+* {rh-serverless-first} for event-driven applications
+* {rh-ocp-data-first} for cloud native storage capabilities
+* {grafana-op} to manage and share Grafana dashboards, data sources, and so on
+* Node Feature Discovery operator to label nodes with AMX capabilities
+
+
+[id="about-architecture-med"]
+== About the architecture
+
+[IMPORTANT]
+====
+Presently, the {med-pattern} - AMX does not have an edge component. Edge deployment capabilities are planned as part of the pattern architecture for a future release.
+====
+
+image::medical-edge/edge-medical-diagnosis-marketing-slide.png[link="/images/medical-edge/edge-medical-diagnosis-marketing-slide.png"]
+
+Components are running on OpenShift either at the data center, at the medical facility, or public cloud running OpenShift.
+
+[id="about-physical-schema-med"]
+=== About the physical schema
+
+The following diagram shows the components that are deployed with the various networks that connect them.
+
+image::medical-edge/physical-network.png[link="/images/medical-edge/physical-network.png"]
+
+The following diagram shows the components that are deployed with the the data flows and API calls between them.
+
+image::medical-edge/physical-dataflow.png[link="/images/medical-edge/physical-dataflow.png"]
+
+== Recorded demo
+
+link:/videos/xray-deployment.svg[image:/videos/xray-deployment.svg[Demo\]]
+
+[id="next-steps_med-diag-index"]
+== Next steps
+
+* Getting started link:getting-started[Deploy the Pattern]
+//We have relevant links on the patterns page
