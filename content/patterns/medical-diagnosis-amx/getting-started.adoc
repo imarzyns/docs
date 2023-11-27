@@ -232,7 +232,7 @@ image::/videos/xray-deployment.svg[link="/videos/xray-deployment.svg"]
 [id="typing-secrets-manually-into-vault"]
 == (Optional) Typing secrets into Vault manually 
 
-Please read this section only if Validate Pattern was deployed using Operator. URL of Vault can be found by running command:
+Log into the Vault using the root token, which can be found by executing the command:
 
 [source,terminal]
 ----
@@ -296,11 +296,12 @@ Examine the `medical-diagnosis-hub` ArgoCD instance. You can track all the appli
 [id="object-storage-setup"]
 = Set up object storage
 
-Modified version of Medical Diagnosis pattern requires to use on-prem object storage instead of AWS S3 (or other cloud equivalent) user can set up ceph rgw object storage. To communicate with its API user can utilize aws-cli. Installation instruction is available on https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions[Amazon website]
+Modified version of a Medical Diagnosis pattern requires to use on-prem object storage. Instead of a AWS S3 (or other cloud equivalent) user can set up the Ceph RGW object storage.
+To communicate with its API user can utilize aws-cli. The installation manual is available on https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions[Amazon website]
 
 Set up local S3 object storage only after ODF is properly deployed by validated pattern.
 
-User can get CEPH_RGW_ENDPOINT by executing command:
+User can extract CEPH_RGW_ENDPOINT by executing the command:
 
 [source,terminal]
 ----
@@ -324,15 +325,17 @@ First thing to check is `s3-rgw`. Please go to ArgoCD dashboard, to `odf` applic
 Second thing to do is to go to ArgoCD dashboard, to `xraylab-init` application and check if job `bucket-init` and `create-s3-secret` are done. If not please resync whole application.
 ====
 
-Clone repository with xray images and push them to the bucket 
+Clone the repository with xray images and push them to the bucket:
 
 [source,terminal]
 ----
 git clone https://github.com/red-hat-data-services/jumpstart-library.git
 ----
 
-Xray images are stored in the following path in repo:
+Xray images are stored in the following path in the repo:
 https://github.com/red-hat-data-services/jumpstart-library/tree/main/demo1-xray-pipeline/base_elements/containers/image-init/base_images
+
+Set environment variables. Create and configure the backet:
 
 [source,terminal]
 ----
@@ -346,7 +349,7 @@ aws --endpoint https://${CEPH_RGW_ENDPOINT} --no-verify-ssl s3api create-bucket 
 aws --endpoint https://${CEPH_RGW_ENDPOINT} --no-verify-ssl s3 cp base_images/ s3://${CEPH_BUCKET_NAME}/ --recursive
 ----
 
-Ceph rgw bucket needs specific bucket policy to be applied. To apply policy execute following commands:
+Ceph RGW bucket needs specific bucket policy to be applied. To apply policy execute following commands:
 
 [source,terminal]
 ----
