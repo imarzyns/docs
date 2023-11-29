@@ -1,7 +1,7 @@
 ---
 title: Medical Diagnosis - AMX
 date: 2023-10-10
-validated: true
+validated: false
 summary: This pattern is based on a demo implementation of an automated data pipeline for chest X-ray analysis previously developed by Red Hat. The pattern is modified to utilize Intel AMX feature.
 products:
 - Red Hat OpenShift Container Platform
@@ -57,7 +57,7 @@ Workflow::
 
 The simplified pipeline without Intel AMX is showcased link:https://www.youtube.com/watch?v=zja83FVsm14[in this video].
 
-image::medical-edge/dashboard.png[link="/images/medical-edge/dashboard.png"]
+image::medical-diagnosis-amx/dashboard.png[link="/images/medical-diagnosis-amx/dashboard.png"]
 
 [id="about-solution-med"]
 == About the solution elements
@@ -86,7 +86,7 @@ The {med-pattern} uses the following products and technologies:
 Presently, the {med-pattern} - AMX does not have an edge component. Edge deployment capabilities are planned as part of the pattern architecture for a future release.
 ====
 
-image::medical-edge/edge-medical-diagnosis-marketing-slide.png[link="/images/medical-edge/edge-medical-diagnosis-marketing-slide.png"]
+image::medical-diagnosis-amx/edge-medical-diagnosis-marketing-slide.png[link="/images/medical-diagnosis-amx/edge-medical-diagnosis-marketing-slide.png"]
 
 Components are running on OpenShift either at the data center, at the medical facility, or public cloud running OpenShift.
 
@@ -95,11 +95,11 @@ Components are running on OpenShift either at the data center, at the medical fa
 
 The following diagram shows the components that are deployed with the various networks that connect them.
 
-image::medical-edge/physical-network.png[link="/images/medical-edge/physical-network.png"]
+image::medical-diagnosis-amx/physical-network.png[link="/images/medical-diagnosis-amx/physical-network.png"]
 
 The following diagram shows the components that are deployed with the the data flows and API calls between them.
 
-image::medical-edge/physical-dataflow.png[link="/images/medical-edge/physical-dataflow.png"]
+image::medical-diagnosis-amx/physical-dataflow.png[link="/images/medical-diagnosis-amx/physical-dataflow.png"]
 
 == Recorded demo
 
