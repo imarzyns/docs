@@ -34,11 +34,20 @@ include::modules/comm-attributes.adoc[]
 
 Background::
 
-This validated pattern is modified version of Medical Diagnosis pattern. It includes the same functionality as the original pattern. The difference is that this solution additionally contains Node Feature Discovery Operator, which task is to detect hardware features and expose it as labels for this node. Red Hat OpenShift Serverless component is modified to assign AI workload to nodes with available AMX feature. Machine Learning model was quantized to int8 precision to improve efficiency without much accuracy loss.
+This validated pattern is a modified version of the Medical Diagnosis pattern. It was extended to showcase *4th Gen Intel Xeon Scalable Processors* capabilities, especially *link:https://www.intel.com/content/www/us/en/products/docs/accelerator-engines/advanced-matrix-extensions/overview.html[Intel AMX]* that speeds up AI workloads.
+The pattern is based on a demo implementation of an automated data pipeline for chest X-ray analysis that was previously developed by Red Hat for the US Department of Veteran Affairs. It includes the same
+functionality as the original demonstration, but uses the GitOps framework to deploy the pattern including Operators, creation of namespaces, and cluster configuration.
+
+Compared to the original Medical Diagnosis pattern, this one was extended by the Node Feature Discovery Operator, whose task is to detect hardware features and expose them as labels for this node.
+Red Hat OpenShift Serverless component is modified to assign AI workload to nodes with available AMX feature.
+
+Moreover, the Machine Learning model was quantized to int8 precision to improve efficiency thanks to *Intel AMX*, with only marginal accuracy loss.
+
+This pattern was also adapted to run in on-premise environments.
 
 Workflow::
 
-* Node Feature Discovery operator labels nodes with AMX capabilities.
+* Node Feature Discovery operator labels nodes with Intel AMX capabilities.
 * Ingest chest X-rays from a simulated X-ray machine and puts them into an `objectStore` based on Ceph.
 * The `objectStore` sends a notification to a Kafka topic.
 * A KNative Eventing listener to the topic triggers a KNative Serving function.
@@ -46,7 +55,7 @@ Workflow::
 * An ML-trained model running in a container makes a risk assessment of Pneumonia for incoming images.
 * A Grafana dashboard displays the pipeline in real time, along with images incoming, processed, anonymized, and full metrics collected from Prometheus.
 
-This pipeline is showcased link:https://www.youtube.com/watch?v=zja83FVsm14[in this video].
+The simplified pipeline without Intel AMX is showcased link:https://www.youtube.com/watch?v=zja83FVsm14[in this video].
 
 image::medical-edge/dashboard.png[link="/images/medical-edge/dashboard.png"]
 
