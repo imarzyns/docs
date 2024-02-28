@@ -123,8 +123,6 @@ oc get mcp
 
 If `worker` MachineConfigPool is marked as ready all applications will automatically continue deployment.
 
-Verify that all certificates and keys where correctly generated in path `/HOME_PATH/certs`. There should be 11 files: client.example.com.crt, client.example.com.key, example.com.key, helloworld.example.com.csr, httpbin.example.com.crt, httpbin.example.com.key, client.example.com.csr, example.com.crt, helloworld.example.com.crt, helloworld.example.com.key, httpbin.example.com.csr.
-
 Verify that the Operators have been installed.
 
 . To verify, in the *OpenShift Container Platform* web console, navigate to *Operators → Installed Operators* page.
@@ -140,35 +138,6 @@ Verify that the Operators have been installed.
 .List of Installed Operators for Multicloud GitOps Validated Pattern with qat
 image::multicloud-gitops-qat/qat-installed-operators.png[Multicloud GitOps Hub with qat installed operators,role="related thumb right"]
 +
-
-Every node with 
-
-If everything installed correctly user can check if Istio is handling requests correctly by sending a request to httpbin application.
-
-[source,terminal]
-----
-export INGRESS_HOST=<NODE_IP>
-export INGRESS_NS=istio-system
-export INGRESS_NAME=istio-ingressgateway
-export SECURE_INGRESS_PORT=$(oc -n "${INGRESS_NS}" get service "${INGRESS_NAME}" -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
-
-curl --resolve "httpbin.example.com:${SECURE_INGRESS_PORT}:$INGRESS_HOST" --cacert certs/httpbin.example.com.crt "https://httpbin.example.com:${SECURE_INGRESS_PORT}/status/418"
-----
-
-User should get following response:
-
-[source,terminal]
-----
--=[ teapot ]=-
-
-   _...._
- .'  _ _ `.
-| ."` ^ `". _,
-\_;`"---"`|//
-  |       ;/
-  \_     _/
-	`"""`
-----
 
 == Deploying the cluster by using the Validated Patterns Operator
 
@@ -277,6 +246,35 @@ In case of wrong Security Context Constraints (SCC) the error can look like this
 [source,terminal]
 ----
 Cannot open /dev/vfio
+----
+
+Verify that all certificates and keys where correctly generated in path `/HOME_PATH/certs`. There should be 11 files: client.example.com.crt, client.example.com.key, example.com.key, helloworld.example.com.csr, httpbin.example.com.crt, httpbin.example.com.key, client.example.com.csr, example.com.crt, helloworld.example.com.crt, helloworld.example.com.key, httpbin.example.com.csr.
+
+If everything installed correctly user can check if Istio is handling requests correctly by sending a request to httpbin application.
+
+[source,terminal]
+----
+export INGRESS_HOST=<NODE_IP>
+export INGRESS_NS=istio-system
+export INGRESS_NAME=istio-ingressgateway
+export SECURE_INGRESS_PORT=$(oc -n "${INGRESS_NS}" get service "${INGRESS_NAME}" -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
+
+curl --resolve "httpbin.example.com:${SECURE_INGRESS_PORT}:$INGRESS_HOST" --cacert certs/httpbin.example.com.crt "https://httpbin.example.com:${SECURE_INGRESS_PORT}/status/418"
+----
+
+User should get following response:
+
+[source,terminal]
+----
+-=[ teapot ]=-
+
+   _...._
+ .'  _ _ `.
+| ."` ^ `". _,
+\_;`"---"`|//
+  |       ;/
+  \_     _/
+	`"""`
 ----
 
 As part of this pattern, HashiCorp Vault has been installed. Refer to the section on https://validatedpatterns.io/secrets/vault/[Vault].
