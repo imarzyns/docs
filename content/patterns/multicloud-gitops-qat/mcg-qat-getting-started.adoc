@@ -21,6 +21,10 @@ include::modules/comm-attributes.adoc[]
  ** link:../../multicloud-gitops-qat/mcg-qat-cluster-sizing[Cluster sizing] requirements.
 * Openshift Cluster must have Image Registry, https://docs.openshift.com/container-platform/4.14/registry/configuring_registry_storage/configuring-registry-storage-rhodf.html[Setup Guide]
 * CephFS should be set as default Storage Class https://docs.openshift.com/container-platform/4.14/storage/container_storage_interface/persistent-storage-csi-sc-manage.html#change-default-storage-class_persistent-storage-csi-sc-manage[Setup Guide]
+* BIOS should be configured according to https://github.com/intel/qatlib/blob/7429ee2b7c837137ed11959a3c2cc3729dc15739/INSTALL#L104[official instructions]. Please consult your platform guide on how to do this. Configuration options should be similar to these:
+ ** Socket configuration > IIO configuration > Intel VT-d Enabled
+ ** Platform Configuration > Miscellaneous Configuration > SR-IOV Support Enabled
+ ** Socket Configuration > IIO Configuration > IOAT Configuration > Sck<n> > IOAT Configuration Enabled
 * Optional: A second OpenShift cluster for multicloud demonstration.
 //Replaced git and podman prereqs with the tooling dependencies page
 * https://validatedpatterns.io/learn/quickstart/[Install the tooling dependencies].
