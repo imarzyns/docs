@@ -137,7 +137,7 @@ Verify that the Operators have been installed.
 +
 .List of Installed Operators for Multicloud GitOps Validated Pattern with qat
 image::multicloud-gitops-qat/qat-installed-operators.png[Multicloud GitOps Hub with qat installed operators,role="related thumb right"]
-+
+
 
 == Deploying the cluster by using the Validated Patterns Operator
 
@@ -232,7 +232,7 @@ image::multicloud-gitops-qat/multicloud-gitops-argocd-qat.png[Multicloud GitOps 
 
 Check the logs of a pod `httpbin` to verify if it uses *{intel-qat}*. In the *OpenShift Container Platform* web console, navigate to *Workloads > Pods*. Change project to `httpbin` and open the *Logs* tab in the pod details. Go to container `istio-proxy` and check if there are no errors. 
 
-In case of faulty Intel Device Plugin not working correctly or if QAT is not available the error can look like this:
+In case of Intel Device Plugin Operator not working correctly or if QAT is not available the error can look like this:
 
 [source,terminal]
 ----
