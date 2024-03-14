@@ -107,11 +107,27 @@ Optional: Set the `KUBECONFIG` variable for the `kubeconfig` file path:
 export KUBECONFIG=~/<path_to_kubeconfig>
 ----
 
+. Generate certificates and keys that will be used by httpbin application. (Optionally user can generate them manually, please refer to Istio official guide: https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#generate-client-and-server-certificates-and-keys). Run the following command:
++
+[source,terminal]
+----
+./pattern.sh make prepare_certs
+----
+
 . Deploy the pattern to your cluster. Run the following command:
 +
 [source,terminal]
 ----
 ./pattern.sh make install
+----
+
+. (Optional) If cluster is behind proxy there can be a problem with unsealing Vault. To fix it run the following command (Instead of angle bracket values put your proxy information):
++
+[source,terminal]
+----
+oc -n imperative patch cj imperative-cronjob -p '{"spec":{"jobTemplate":{"spec":{"template":{"spec":{"initContainers":[{"name": "git-init", "env": [{"name":"HOME","value":"/git/home"},{"name":"HTTP_PROXY", "value":"<PUT_YOUR_HTTP_PROXY_HERE>"},{"name":"HTTPS_PROXY","value":"<PUT_YOUR_HTTPS_PROXY_HERE>"},{"name":"NO_PROXY","value":"<PUT_YOUR_NOPROXY_HERE>"},{"name":"http_proxy", "value":"<PUT_YOUR_HTTP_PROXY_HERE>"},{"name":"https_proxy","value":"<PUT_YOUR_HTTPS_PROXY_HERE>"},{"name":"no_proxy","value":"<PUT_YOUR_NOPROXY_HERE>"}]}]}}}}}}'
+
+oc -n imperative patch cj unsealvault-cronjob -p '{"spec":{"jobTemplate":{"spec":{"template":{"spec":{"initContainers":[{"name": "git-init", "env": [{"name":"HOME","value":"/git/home"},{"name":"HTTP_PROXY", "value":"<PUT_YOUR_HTTP_PROXY_HERE>"},{"name":"HTTPS_PROXY","value":"<PUT_YOUR_HTTPS_PROXY_HERE>"},{"name":"NO_PROXY","value":"<PUT_YOUR_NOPROXY_HERE>"},{"name":"http_proxy", "value":"<PUT_YOUR_HTTP_PROXY_HERE>"},{"name":"https_proxy","value":"<PUT_YOUR_HTTPS_PROXY_HERE>"},{"name":"no_proxy","value":"<PUT_YOUR_NOPROXY_HERE>"}]}]}}}}}}'
 ----
 
 After installation is done user must wait until all required Machine Configurations are applied to worker nodes. Depending on node specifications, rebooting and applying changes can take around 30 minutes. User can check progress by running command:
