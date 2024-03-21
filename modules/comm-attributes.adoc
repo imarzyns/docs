@@ -44,8 +44,6 @@
 // Intel
 :intel-amx: Intel AMX
 :intel-qat: Intel QAT
-<<<<<<< HEAD
-=======
 :intel-amx-full: Intel Advanced Matrix Extensions
 :intel-qat-full: Intel QuickAssist Technology
 :intel-4th-gen-xeon: 4th Generation Intel Xeon
@@ -53,8 +51,6 @@
 :intel-4th-gen-xeon-processors: 4th Generation Intel Xeon Scalable Processors
 :intel-5th-gen-xeon-processors: 5th Generation Intel Xeon Scalable Processors
 :intel-4th-gen-xeon-amx: 4th Gen Intel Xeon Scalable processors with Intel Advanced Matrix Extensions (Intel AMX)
-<<<<<<< HEAD
->>>>>>> 4ba39606 (Add QAT-based pattern documentation)
 :intel-sgx: Intel SGX
 :intel-amx-full: Intel Advanced Matrix Extensions
 :intel-qat-full: Intel QuickAssist Technology
@@ -71,10 +67,8 @@
 //Gramine Shielded Containers
 :gramine: GSC
 :gramine-full: Gramine Shielded Containers
-=======
 :intel-4th-gen-xeon-qat: 4th Gen Intel Xeon Scalable processors with Intel QuickAssist (Intel QAT)
 :intel-5th-gen-xeon-qat: 5th Gen Intel Xeon Scalable processors with Intel QuickAssist (Intel QAT)
->>>>>>> 5da028a0 (Add QAT-based pattern documentation)
 //Operators
 :validated-patterns-op: Validated Patterns Operator
 :grafana-op: Grafana Operator
