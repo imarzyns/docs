@@ -15,7 +15,7 @@ industries:
 aliases: /multicloud-gitops-qat/
 # uncomment once this exists
 # pattern_logo: multicloud-gitops.png
-pattern_logo: qat-intel.png
+pattern_logo: intel-qat.png
 links:
   install: mcg-qat-getting-started
   help: https://groups.google.com/g/hybrid-cloud-patterns
@@ -99,7 +99,7 @@ https://github.com/intel/intel-technology-enabling-for-openshift/tree/main[Intel
 The Intel Technology Enabling for OpenShift project provides Intel Data Center hardware feature-provisioning technologies with the Red Hat OpenShift Container Platform (RHOCP).
 
 https://github.com/maistra/istio-operator/blob/maistra-3.0/bundle/README.md[Sail Operator, Istio Operator for Red Hat OpenShift]::
-A service mesh is a dedicated infrastructure layer that you can add to your applications. It allows you to transparently add capabilities like observability, traffic management, and security, without adding them to your own code. Sail Operator serve as the foundation for Red Hat OpenShift Service Mesh 3.
+A service mesh is a dedicated infrastructure layer that you can add to your applications. It allows you to transparently add capabilities like observability, traffic management, and security, without adding them to your code. Sail Operator serves as the foundation for Red Hat OpenShift Service Mesh 3.
 
 Hashicorp Vault::
 Provides a secure centralized store for dynamic infrastructure and applications across clusters, including over low-trust networks between clouds and data centers.
@@ -182,13 +182,13 @@ View and download all of the diagrams above from the link:https://www.redhat.com
 
 The basic {mcg-pattern} has been extended to highlight the *{intel-5th-gen-xeon-processors}* capabilities, offering developers a streamlined pathway to accelerate their workloads through the integration of *{intel-qat}*.
 
-The basic pattern has been extended by 4 components: Intel Device Plugin Operator, Node Feature Discovery Operator (NFD), Sail Operator and simple HTTP request and response application. Main purpose of this extension is to enable TLS handshaking and showcase how *{intel-qat}* accelerates cryptographic operations.
+The basic pattern has been extended by 4 components: Intel Device Plugin Operator, Node Feature Discovery Operator (NFD), Sail Operator, and simple HTTP request and response application. The main purpose of this extension is to enable TLS handshaking and showcase how *{intel-qat}* accelerates cryptographic operations.
 
-Intel Device Plugin Operator task is to expose QAT resources to Openshift layer, so it makes it easy to use, when creating deployments. After QAT resources are properly exposed Node Feature Discovery Operator is deployed. NFD manages the detection of hardware features and configuration in an OpenShift Container Platform cluster. It labels the nodes with hardware-specific information.
+Intel Device Plugin Operator's task is to expose QAT resources to the Openshift layer, so it makes it easy to use when creating deployments. After QAT resources are properly exposed Node Feature Discovery Operator is deployed. NFD manages the detection of hardware features and configuration in an OpenShift Container Platform cluster. It labels the nodes with hardware-specific information.
 
-Sail Operator deploys Istio Service Mesh. It is basically an extra layer added on top of user's applications, and it adds capabilities like traffic management between services and security, without manually adding them to code. Istio in version deployed by Sail Operator allows for additional configuration, that is enabling *{intel-qat}* in cryptographic operations. The last added component is httpbin application, which is HTTP request and response service used for testing and showcase purposes. Workload idea was based on https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#configure-a-tls-ingress-gateway-for-a-single-host[Istio official instructions on how to setup secure TLS ingress gateway].
+Sail Operator deploys Istio Service Mesh. It is basically an extra layer added on top of user applications, and it adds capabilities like traffic management between services and security, without manually adding them to code. The Istio version deployed by Sail Operator allows for additional configuration, that is enabling *{intel-qat}* in cryptographic operations. The last added component is the httpbin application, which is HTTP request and response service used for testing and showcase purposes. The workload idea was based on https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#configure-a-tls-ingress-gateway-for-a-single-host[Istio's official instructions on how to setup secure TLS ingress gateway].
 
-The appearance of qat as private key provider in Istio ingress gateway pod logs confirms that Intel QAT is used:
+The appearance of qat as a private key provider in Istio ingress gateway pod logs confirms that Intel QAT is used:
 
 //figure 7 originally
 .Logs from Istio ingress gateway pod

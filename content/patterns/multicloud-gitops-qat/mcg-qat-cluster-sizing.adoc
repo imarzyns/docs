@@ -48,6 +48,16 @@ To understand cluster sizing requirements for the {qat-mcg-pattern}, consider th
 | Operator
 | openshift-storage
 | Cloud Native storage solution
+
+| Intel Device Plugin®
+| Operator
+| inteldeviceplugin
+| Manages Intel hardware feature-provisioning
+
+| Sail Operator
+| Operator
+| istio-system
+| Istio Service Mesh solution
 |===
 
 The {qat-mcg-pattern} also includes the Red Hat Advanced Cluster Management (RHACM) supporting operator that is installed by OpenShift GitOps using Argo CD.
@@ -59,4 +69,4 @@ The datacenter hub OpenShift cluster needs to be a bit bigger than the Factory/E
 
 The recommended clusters sizes for datacenter hub and for managed datacenter are the same in this case:
 
-include::modules/intel-recommended-cluster-sizing.adoc[]
+include::modules/intel-recommended-cluster-sizing-5th-gen-sgx.adoc[]

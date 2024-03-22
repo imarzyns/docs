@@ -15,29 +15,27 @@ include::modules/comm-attributes.adoc[]
 
 .Prerequisites
 
-* An OpenShift cluster
- ** To create an OpenShift cluster, go to the https://console.redhat.com/[Red Hat Hybrid Cloud console] and select *Services \-> Containers \-> Create cluster*.
+* An {ocp} cluster
+ ** To create an {ocp} cluster, go to the https://console.redhat.com/[Red Hat Hybrid Cloud console] and select *Services \-> Containers \-> Create cluster*.
  ** The cluster must have a dynamic `StorageClass` to provision `PersistentVolumes`.
  ** link:../../multicloud-gitops-qat/mcg-qat-cluster-sizing[Cluster sizing] requirements.
-* Openshift Cluster must have Image Registry, https://docs.openshift.com/container-platform/4.14/registry/configuring_registry_storage/configuring-registry-storage-rhodf.html[Setup Guide]
-* CephFS should be set as default Storage Class https://docs.openshift.com/container-platform/4.14/storage/container_storage_interface/persistent-storage-csi-sc-manage.html#change-default-storage-class_persistent-storage-csi-sc-manage[Setup Guide]
+* {ocp} Cluster must have Image Registry - https://docs.openshift.com/container-platform/4.14/registry/configuring_registry_storage/configuring-registry-storage-rhodf.html[Setup Guide]
+* CephFS should be set as default Storage Class - https://docs.openshift.com/container-platform/4.14/storage/container_storage_interface/persistent-storage-csi-sc-manage.html#change-default-storage-class_persistent-storage-csi-sc-manage[Setup Guide]
 * BIOS should be configured according to https://github.com/intel/qatlib/blob/7429ee2b7c837137ed11959a3c2cc3729dc15739/INSTALL#L104[official instructions]. Please consult your platform guide on how to do this. Configuration options should be similar to these:
  ** Socket configuration > IIO configuration > Intel VT-d Enabled
  ** Platform Configuration > Miscellaneous Configuration > SR-IOV Support Enabled
  ** Socket Configuration > IIO Configuration > IOAT Configuration > Sck<n> > IOAT Configuration Enabled
-* Optional: A second OpenShift cluster for multicloud demonstration.
+* Optional: A second {ocp} cluster for multicloud demonstration.
 //Replaced git and podman prereqs with the tooling dependencies page
 * https://validatedpatterns.io/learn/quickstart/[Install the tooling dependencies].
 
-The use of this pattern depends on having at least one running Red Hat OpenShift cluster. However, consider creating a cluster for deploying the GitOps management hub assets and a separate cluster for the managed cluster.
+The use of this pattern depends on having at least one running Red Hat {ocp} cluster. However, consider creating a cluster for deploying the GitOps management hub assets and a separate cluster for the managed cluster.
 
-If you do not have a running Red Hat OpenShift cluster, you can start one on a
+If you do not have a running Red Hat {ocp} cluster, you can start one on a
 public or private cloud by using https://console.redhat.com/openshift/create[Red Hat Hybrid Cloud Console].
 
 .Procedure
 
-. https://validatedpatterns.io/learn/quickstart/[Install the tooling dependencies].
-+
 . Fork the https://github.com/validatedpatterns-sandbox/qat-accelerated-istio[multicloud-gitops-qat] repository on GitHub.
 . Clone the forked copy of this repository.
 +
@@ -107,21 +105,14 @@ Optional: Set the `KUBECONFIG` variable for the `kubeconfig` file path:
 export KUBECONFIG=~/<path_to_kubeconfig>
 ----
 
-. Generate certificates and keys that will be used by httpbin application. (Optionally user can generate them manually, please refer to Istio official guide: https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#generate-client-and-server-certificates-and-keys). Run the following command:
-+
-[source,terminal]
-----
-./pattern.sh make prepare_certs
-----
-
-. Deploy the pattern to your cluster. Run the following command:
+. Deploy the pattern to your cluster. Script will automatically generate certificates and keys in `/HOME/certs` directory. Run the following command:
 +
 [source,terminal]
 ----
 ./pattern.sh make install
 ----
 
-. (Optional) If cluster is behind proxy there can be a problem with unsealing Vault. To fix it run the following command (Instead of angle bracket values put your proxy information):
+. (Optional) If cluster is behind proxy there can be a problem with unsealing Vault. To fix it run the following command (put your proxy information in place of angle braced <PLACEHOLDERS>):
 +
 [source,terminal]
 ----
@@ -141,7 +132,7 @@ If `worker` MachineConfigPool is marked as ready all applications will automatic
 
 Verify that the Operators have been installed.
 
-. To verify, in the *OpenShift Container Platform* web console, navigate to *Operators → Installed Operators* page.
+. To verify, in the *{ocp}* web console, navigate to *Operators → Installed Operators* page.
 . Check that the following Operators are installed with  `Succeeded` status (Figure 1): 
 * *Advanced Cluster Management for Kubernetes* 
 * *multicluster engine for Kubernetes* 
@@ -159,7 +150,7 @@ image::multicloud-gitops-qat/qat-installed-operators.png[Multicloud GitOps Hub w
 
 To install the *Validated Patterns Operator*:
 
-. Log in to the *Openshift Container Platform* web console and select *Operators > OperatorHub*.
+. Log in to the *{ocp}* web console and select *Operators > OperatorHub*.
 
 . Search for *Validated Patterns Operator*, open it and click *Install*.
 +
@@ -174,11 +165,11 @@ image::multicloud-gitops-qat/qat-validated-pattern-operator.png[Install Validate
 
 After succeeded installation open *Validated Patterns Operator*, go to *Pattern* tab and click *Create Pattern*.
 
-. Fill the *Name* of the pattern `multicloud-gitops-qat` and *Cluster Group Name* `hub` (from _values-global.yaml_ file).
+. Set the *Name* field to `multicloud-gitops-qat`, and *Cluster Group Name* `hub`. Values must be the same as in _values-global.yaml_ file (Figure 3).
 
-. Under *Git Config > Target Repo* copy the link to your fork and under *Git Config > Target Revision* write the name of your branch (Figure 3).
+. As a *Git Config > Target Repo* value, paste the link to your fork. Under *Git Config > Target Revision* write the name of your branch (Figure 3).
 
-. Click *Create* to create the pattern.
+. Click the *Create* button to create the pattern.
 +
 .Create Pattern Form
 image::multicloud-gitops-qat/qat-create-pattern.png[Create pattern Multicloud GitOps with qat]
@@ -187,7 +178,7 @@ image::multicloud-gitops-qat/qat-create-pattern.png[Create pattern Multicloud Gi
 
 Verify that the rest of Operators have been installed:
 
-. To verify, in the *OpenShift Container Platform* web console, navigate to *Operators → Installed Operators* page.
+. To verify, in the *{ocp}* web console, navigate to *Operators → Installed Operators* page.
 . Check that the following Operators are installed with  `Succeeded` status (Figure 1): 
 * *Advanced Cluster Management for Kubernetes* 
 * *multicluster engine for Kubernetes* 
@@ -196,20 +187,20 @@ Verify that the rest of Operators have been installed:
 * *Sail Operator*
 * *Intel Device Plugin Operator*
 
-Generate client and server certificates. User can refer to Istio official guide: https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#generate-client-and-server-certificates-and-keys
+Generate client and server certificates. You can refer to Istio official guide: https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#generate-client-and-server-certificates-and-keys
 
-After generating them add them as secrets to *Vault* manually:
+After generating certificates, add them as secrets to *Vault* manually:
 
-. Go to Vault service route. URL can be found:
+. Go to the Vault service route. The URL can be found either:
 
-.. by running command:
+.. by running following command:
 +
 [source,terminal]
 ----
 oc -n vault get route vault -ojsonpath='{.spec.host}'
 ----
 +
-.. in *Openshift Container Platform* web console under *Networking > Routes* for `vault` project.
+.. or in the *{ocp}* web console under *Networking > Routes* for `vault` project.
 
 . Log into the Vault using root token. Root token can be found by executing command:
 +
@@ -219,22 +210,22 @@ oc -n imperative get secrets vaultkeys -ojsonpath='{.data.vault_data_json}' | ba
 ----
 +
 
-. After login go to `secret` catalog and clik *Create secret* and fill all the fields manually (Figure 2):
+. After logging in, go to `secret` catalog and click the *Create secret* button. You should see form with inputs, which must be filled manually (Figure 4). 
 
-.. *Path for this secrets* should be look like this: `global/certs/httpbin.example.com.crt`, `global/certs/example.com.crt`, `global/certs/httpbin.example.com.key`.
+.. *Path for this secrets* should be filled with one of the following strings: `global/certs/httpbin.example.com.crt`, `global/certs/example.com.crt`, `global/certs/httpbin.example.com.key`.
 
-.. Under *Secret data* key is `secret` and in next field put its value.
+.. In the *Secret data* section add a new secret. In the left field (key) put the *content* string. On the right, paste your certificate.
 
-.. Click *Add* and then *Save*.
+.. Click the *Add* button, and then the *Save* button.
 +
-.Create secret
-image::multicloud-gitops-qat/qat-secret-vault.png[Create secret in the vault]
+.Create secret in the Vault
+image::multicloud-gitops-qat/qat-secret-vault.png[Create secret in the Vault]
 +
 
 
 == Verification
 
-Go to the Hub ArgoCD and verify that all applications are synchronized. The URL can be found in *Openshift Container Platform* web console under *Networking > Routes* for the project `multicloud-gitops-qat-hub` or use command:
+Go to the Hub ArgoCD and verify that all applications are synchronized. The URL can be found in *{ocp}* web console under *Networking > Routes* for the project `multicloud-gitops-qat-hub` or use command:
 
 [source,terminal]
 ----
@@ -246,7 +237,7 @@ All applications should be `Healthy` and `Synced`:
 .ArgoCD panel with `qat-app`
 image::multicloud-gitops-qat/multicloud-gitops-argocd-qat.png[Multicloud GitOps Hub with `qat-app`]
 
-Check the logs of a pod `httpbin` to verify if it uses *{intel-qat}*. In the *OpenShift Container Platform* web console, navigate to *Workloads > Pods*. Change project to `httpbin` and open the *Logs* tab in the pod details. Go to container `istio-proxy` and check if there are no errors. 
+Check the `httpbin` pod logs of a pod `httpbin` to verify if it uses *{intel-qat}*. In the *{ocp}* web console, navigate to *Workloads > Pods*. Change project to `httpbin` and open the `Logs` tab in the pod details. Go to container `istio-proxy` and check if there are no errors. 
 
 In case of Intel Device Plugin Operator not working correctly or if QAT is not available the error can look like this:
 
@@ -264,9 +255,9 @@ In case of wrong Security Context Constraints (SCC) the error can look like this
 Cannot open /dev/vfio
 ----
 
-Verify that all certificates and keys where correctly generated in path `/HOME_PATH/certs`. There should be 11 files: client.example.com.crt, client.example.com.key, example.com.key, helloworld.example.com.csr, httpbin.example.com.crt, httpbin.example.com.key, client.example.com.csr, example.com.crt, helloworld.example.com.crt, helloworld.example.com.key, httpbin.example.com.csr.
+Verify that all certificates and keys were correctly generated in path `/HOME_PATH/certs` path. There should be 11 files: client.example.com.crt, client.example.com.key, example.com.key, helloworld.example.com.csr, httpbin.example.com.crt, httpbin.example.com.key, client.example.com.csr, example.com.crt, helloworld.example.com.crt, helloworld.example.com.key, httpbin.example.com.csr.
 
-If everything installed correctly user can check if Istio is handling requests correctly by sending a request to httpbin application.
+When everything is ready, you can check if Istio handles requests correctly by sending a request to the `httpbin` application.
 
 [source,terminal]
 ----
@@ -293,7 +284,7 @@ User should get following response:
 	`"""`
 ----
 
-As part of this pattern, HashiCorp Vault has been installed. Refer to the section on https://validatedpatterns.io/secrets/vault/[Vault].
+As a part of this pattern, HashiCorp Vault has been installed. Refer to the section on https://validatedpatterns.io/secrets/vault/[Vault].
 
 [id="next-steps_mcg-getting-started"]
 == Next steps
