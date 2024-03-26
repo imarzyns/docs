@@ -17,10 +17,9 @@ include::modules/comm-attributes.adoc[]
 
 * An {ocp} cluster
  ** To create an {ocp} cluster, go to the https://console.redhat.com/[Red Hat Hybrid Cloud console] and select *Services \-> Containers \-> Create cluster*.
- ** The cluster must have a dynamic `StorageClass` to provision `PersistentVolumes`.
+ ** The cluster must have a dynamic `StorageClass` to provision `PersistentVolumes`. It was tested with ODF (OpenShift Data Foundation) or LVM Storage solutions. CephFS should be set as a default Storage Class - https://docs.openshift.com/container-platform/4.14/storage/container_storage_interface/persistent-storage-csi-sc-manage.html#change-default-storage-class_persistent-storage-csi-sc-manage[Setup Guide]
  ** link:../../multicloud-gitops-qat/mcg-qat-cluster-sizing[Cluster sizing] requirements.
 * {ocp} Cluster must have Image Registry - https://docs.openshift.com/container-platform/4.14/registry/configuring_registry_storage/configuring-registry-storage-rhodf.html[Setup Guide]
-* CephFS should be set as default Storage Class - https://docs.openshift.com/container-platform/4.14/storage/container_storage_interface/persistent-storage-csi-sc-manage.html#change-default-storage-class_persistent-storage-csi-sc-manage[Setup Guide]
 * BIOS should be configured according to https://github.com/intel/qatlib/blob/7429ee2b7c837137ed11959a3c2cc3729dc15739/INSTALL#L104[official instructions]. Please consult your platform guide on how to do this. Configuration options should be similar to these:
  ** Socket configuration > IIO configuration > Intel VT-d Enabled
  ** Platform Configuration > Miscellaneous Configuration > SR-IOV Support Enabled
@@ -112,7 +111,7 @@ export KUBECONFIG=~/<path_to_kubeconfig>
 ./pattern.sh make install
 ----
 
-. (Optional) If cluster is behind proxy there can be a problem with unsealing Vault. To fix it run the following command (put your proxy information in place of angle braced <PLACEHOLDERS>):
+. (Optional) If cluster is behind proxy extra settings might be needed for unsealing Vault. Please run the following command (put your proxy information in place of angle braced <PLACEHOLDERS>):
 +
 [source,terminal]
 ----
@@ -237,7 +236,7 @@ All applications should be `Healthy` and `Synced`:
 .ArgoCD panel with `qat-app`
 image::multicloud-gitops-qat/multicloud-gitops-argocd-qat.png[Multicloud GitOps Hub with `qat-app`]
 
-Check the `httpbin` pod logs of a pod `httpbin` to verify if it uses *{intel-qat}*. In the *{ocp}* web console, navigate to *Workloads > Pods*. Change project to `httpbin` and open the `Logs` tab in the pod details. Go to container `istio-proxy` and check if there are no errors. 
+Check the `httpbin` pod logs of an `httpbin` Deployment to verify if it uses *{intel-qat}*. In the *{ocp}* web console, navigate to *Workloads > Pods*. Change project to `httpbin` and open the `Logs` tab in the pod details. Go to container `istio-proxy` and check if there are no errors. 
 
 In case of Intel Device Plugin Operator not working correctly or if QAT is not available the error can look like this:
 
@@ -255,9 +254,9 @@ In case of wrong Security Context Constraints (SCC) the error can look like this
 Cannot open /dev/vfio
 ----
 
-Verify that all certificates and keys were correctly generated in path `/HOME_PATH/certs` path. There should be 11 files: client.example.com.crt, client.example.com.key, example.com.key, helloworld.example.com.csr, httpbin.example.com.crt, httpbin.example.com.key, client.example.com.csr, example.com.crt, helloworld.example.com.crt, helloworld.example.com.key, httpbin.example.com.csr.
+Verify that all certificates and keys were correctly generated in path `/HOME_PATH/certs`. There should be 11 files: client.example.com.crt, client.example.com.key, example.com.key, helloworld.example.com.csr, httpbin.example.com.crt, httpbin.example.com.key, client.example.com.csr, example.com.crt, helloworld.example.com.crt, helloworld.example.com.key, httpbin.example.com.csr.
 
-When everything is ready, you can check if Istio handles requests correctly by sending a request to the `httpbin` application.
+When everything is ready, you can check if Istio handles requests correctly by sending a request to the `httpbin` application. Note that `<NODE_IP>` value can be IP address of any worker node.
 
 [source,terminal]
 ----
@@ -266,6 +265,7 @@ export INGRESS_NS=istio-system
 export INGRESS_NAME=istio-ingressgateway
 export SECURE_INGRESS_PORT=$(oc -n "${INGRESS_NS}" get service "${INGRESS_NAME}" -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
 
+cd $HOME
 curl --resolve "httpbin.example.com:${SECURE_INGRESS_PORT}:$INGRESS_HOST" --cacert certs/httpbin.example.com.crt "https://httpbin.example.com:${SECURE_INGRESS_PORT}/status/418"
 ----
 
